@@ -23,8 +23,16 @@ def britishize(text):
     Returns the British English version of the passed-in American
     English text.
     """
-    propmt_template = "Q: What is the British English version of this text?\nA: "
-    prompt = propmt_template + text
+    propmt_template = """I will give you an american english version of a text, it will be delimited by three backticks ```. 
+Just give me the translation and no other surronunding symbols.
+Please give me the translation of the following text into British English.
+
+```
+{text}
+```
+        """
+
+    prompt = propmt_template.format(text=text)
 
     text = get_response(prompt)
 
