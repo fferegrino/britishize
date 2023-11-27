@@ -1,57 +1,31 @@
-us2gb = {
-    "aerograms": "aerogrammes",
-    "aging": "ageing",
-    "amortizations": "amortisations",
-    "biased": "biassed",
-    "caliber": "calibre",
-    "calisthenics": "callisthenics",
-    "cannibalized": "cannibalised",
-    "cataloged": "catalogued",
-    "cataloging": "cataloguing",
-    "caviling": "cavilling",
-    "centimeter": "centimetre",
-    "connection": "connexion",
-    "contextualized": "contextualised",
-    "councilor": "councillor",
-    "cudgeling": "cudgelling",
-    "customizes": "customises",
-    "decriminalize": "decriminalise",
-    "democratized": "democratised",
-    "democratizing": "democratising",
-    "deodorizing": "deodorising",
-    "dialed": "dialled",
-    "discolor": "discolour",
-    "pedestrianized": "pedestrianised",
-    "personalizes": "personalises",
-    "practices": "practises",
-    "pulverization": "pulverisation",
-    "remolded": "remoulded",
-    "rumor": "rumour",
-    "scandalizes": "scandalises",
-    "sheik": "sheikh",
-    "siphoning": "syphoning",
-    "splendor": "splendour",
-    "stabilized": "stabilised",
-    "standardizing": "standardising",
-    "stigmatize": "stigmatise",
-    "sulfate": "sulphate",
-    "cookie": "biscuit",
-    "fries": "chips",
-    "apartment": "flat",
-}
+from openai import OpenAI
 
+OPENAI_API_KEY = "sk-"
+OPENAI_MODEL = "gpt-3.5-turbo"
+TEMPERATURE = 0 # Value between 0 and 2
+
+client = OpenAI(api_key=OPENAI_API_KEY)
+
+def get_response(prompt):
+    messages = [
+        { "role": "user", "content": prompt }
+    ]
+    completions = client.chat.completions.create(
+        model = OPENAI_MODEL,
+        temperature = TEMPERATURE,
+        messages = messages,
+    )
+    return completions.choices[0].message.content
+    
 
 def britishize(text):
     """
     Returns the British English version of the passed-in American
     English text.
     """
-    words = text.split()
-    brand_new_words = []
-    for i in range(len(words)):
-        if words[i] in us2gb:
-            brand_new_words.append(us2gb[words[i]])
-        else:
-            brand_new_words.append(words[i])
+    propmt_template = "Q: What is the British English version of this text?\nA: "
+    prompt = propmt_template + text
 
-    return " ".join(brand_new_words)
+    text = get_response(prompt)
+
+    return text
