@@ -1,4 +1,5 @@
 from openai import OpenAI
+import json
 
 OPENAI_API_KEY = "sk-"
 OPENAI_MODEL = "gpt-3.5-turbo"
@@ -25,7 +26,8 @@ def britishize(text):
     """
     propmt_template = """I will give you an american english version of a text, it will be delimited by three backticks ```. 
 Just give me the translation and no other surronunding symbols.
-Please give me the translation of the following text into British English.
+Please give me the translation of the following text into British English \
+in the shape of a JSON document with keys "language" and "content".
 
 ```
 {text}
@@ -35,5 +37,7 @@ Please give me the translation of the following text into British English.
     prompt = propmt_template.format(text=text)
 
     text = get_response(prompt)
+
+    text = json.loads(text)["content"]
 
     return text
